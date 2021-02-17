@@ -74,7 +74,7 @@ SuperPacket *FileParser::process_packet(void *pkt)
     std::map<std::string, std::uint32_t>::iterator mit;
 
     to_fill.clear();
-    sp = new SuperPacket(pkt, config.payload);
+    sp = new SuperPacket(pkt, config.payload, &config);  // kaiyu
     if(!sp->check_parseable())
     {
         delete sp;

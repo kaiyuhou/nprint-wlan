@@ -15,6 +15,8 @@
 
 
 #include "conf.hpp"
+#include "radiotap_header.hpp"
+#include "wlan_header.hpp"
 #include "ethernet_header.hpp"
 #include "ipv4_header.hpp"
 #include "ipv6_header.hpp"
@@ -26,17 +28,21 @@
 class SuperPacket
 {
     public:
-        SuperPacket(void *pkt, uint32_t max_payload_len);
+        SuperPacket(void *pkt, uint32_t max_payload_len, Config *c);
         void print_packet();
         std::string get_ip_address();
+        std::string get_tx_mac_address();  // kaiyu
         bool check_parseable() { return parseable; };
         void get_bitstring(Config *c, std::vector<int8_t> &to_fill);
+        Config *config;  // kaiyu
     private:
         bool process_v4(void *pkt);
         bool process_v6(void *pkt);
 
         bool parseable;
         uint32_t max_payload_len;
+        RadiotapHeader radiotap_header;  // kaiyu
+        WlanHeader wlan_header;  // kaiyu
         EthHeader ethernet_header;
         IPv4Header ipv4_header;
         IPv6Header ipv6_header;

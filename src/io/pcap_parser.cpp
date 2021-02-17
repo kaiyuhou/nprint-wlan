@@ -19,7 +19,7 @@ void PCAPParser::process_file()
     pcap_t *f;
     
     f = get_pcap_handle();
-    pcap_loop(f, 0, packet_handler, (u_char *) this);
+    pcap_loop(f, 0, packet_handler, (u_char *) this); // A value of -1 or 0 for cnt is equivalent to infinity
     pcap_close(f);
 }
 
@@ -36,7 +36,11 @@ void PCAPParser::packet_handler(u_char *user_data, const struct pcap_pkthdr* pkt
     if(sp == NULL) return;
     rts = pcp->process_timestamp(pkthdr->ts);
 
-    pcp->custom_output.push_back(sp->get_ip_address());
+    if(sp->config->wlan == 1) {  // kaiyu
+        pcp->custom_output.push_back(sp->get_tx_mac_address());
+    } else {
+        pcp->custom_output.push_back(sp->get_ip_address());
+    }
     if(rts != -1) pcp->custom_output.push_back(std::to_string(rts));
     pcp->write_output(sp);
 }
@@ -44,7 +48,11 @@ void PCAPParser::packet_handler(u_char *user_data, const struct pcap_pkthdr* pkt
 void PCAPParser::format_and_write_header()
 {
     std::vector<std::string> header;
-    header.push_back("ip");
+    if(config.wlan == 1) {  // kaiyu
+        header.push_back("src_mac");
+    } else {
+        header.push_back("ip");
+    }
     if(config.relative_timestamps == 1) header.push_back("rts");
 
     fw->write_header(header);

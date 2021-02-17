@@ -34,6 +34,8 @@ void FileWriter::write_header(std::vector<std::string> header)
 
 std::vector<std::string> FileWriter::build_bitstring_header(std::vector<std::string> &header)
 {
+    RadiotapHeader r;  // kaiyu
+    WlanHeader w;  // kaiyu
     EthHeader e;
     IPv4Header v4;
     IPv6Header v6;
@@ -44,15 +46,19 @@ std::vector<std::string> FileWriter::build_bitstring_header(std::vector<std::str
     
     /* Need to inform the payload of the max len */
     p.set_info(0, config.payload);
-    
-    if(config.eth == 1)   e.get_bitstring_header(header);
-    if(config.ipv4 == 1)  v4.get_bitstring_header(header);
-    if(config.ipv6 == 1)  v6.get_bitstring_header(header);
-    if(config.tcp == 1)   tcp.get_bitstring_header(header);
-    if(config.udp == 1)   udp.get_bitstring_header(header);
-    if(config.icmp == 1)  icmp.get_bitstring_header(header);
-    if(config.payload != 0) p.get_bitstring_header(header);
 
+    if(config.wlan == 1) {  // kaiyu
+        r.get_bitstring_header(header);
+        w.get_bitstring_header(header);
+    } else {    
+        if(config.eth == 1)   e.get_bitstring_header(header);
+        if(config.ipv4 == 1)  v4.get_bitstring_header(header);
+        if(config.ipv6 == 1)  v6.get_bitstring_header(header);
+        if(config.tcp == 1)   tcp.get_bitstring_header(header);
+        if(config.udp == 1)   udp.get_bitstring_header(header);
+        if(config.icmp == 1)  icmp.get_bitstring_header(header);
+        if(config.payload != 0) p.get_bitstring_header(header);      
+    }
     return header;
 }
 

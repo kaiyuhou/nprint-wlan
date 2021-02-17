@@ -10,6 +10,8 @@
 void SuperPacket::print_packet()
 {
     printf("Superpacket {\n");
+    radiotap_header.print_header();  // kaiyu
+    wlan_header.print_header();  // kaiyu
     ethernet_header.print_header();
     ipv4_header.print_header();
     ipv6_header.print_header();
@@ -20,38 +22,52 @@ void SuperPacket::print_packet()
     printf("}\n");
 }
 
-SuperPacket::SuperPacket(void *pkt, uint32_t max_payload_len)
+SuperPacket::SuperPacket(void *pkt, uint32_t max_payload_len, Config *c)
 {
+
+    struct radiotap_header *radiotaph;  // kaiyu
+    struct wlan_header * wlanh;  // kaiyu
+
     struct ip *ipv4h;
     struct ether_header *eth;
 
+    this->config = c; // kaiyu
+
     parseable = true;
-
     this->max_payload_len = max_payload_len;
-    eth = (struct ether_header *) pkt;
 
-    /* Check if packet has an ethernet header */
-    if((ntohs(eth->ether_type) == ETHERTYPE_IP) || ((ntohs(eth->ether_type) == 0x86DD)))
-    {
-        ethernet_header.set_raw(eth);
-        ipv4h = (struct ip *) &eth[1];
-    }
-    else
-    {
-        ipv4h = (struct ip *) pkt;
-    }
-    
-    if(ipv4h->ip_v == 4)
-    {
-        parseable = process_v4((void *) ipv4h);
-    }
-    else if(ipv4h->ip_v == 6)
-    {
-        parseable = process_v6((void *) ipv4h);
-    }
-    else
-    {
-        parseable = false;
+    if (c->wlan == 1) { // kaiyu: wlan packet
+        radiotaph = (struct radiotap_header *) pkt;
+        radiotap_header.set_raw(radiotaph);
+
+        wlanh = (struct wlan_header *) &radiotaph[1]; 
+        wlan_header.set_raw(wlanh);
+    } else {
+        eth = (struct ether_header *) pkt;
+
+        /* Check if packet has an ethernet header */
+        if((ntohs(eth->ether_type) == ETHERTYPE_IP) || ((ntohs(eth->ether_type) == 0x86DD)))
+        {
+            ethernet_header.set_raw(eth);
+            ipv4h = (struct ip *) &eth[1];
+        }
+        else
+        {
+            ipv4h = (struct ip *) pkt;
+        }
+        
+        if(ipv4h->ip_v == 4)
+        {
+            parseable = process_v4((void *) ipv4h);
+        }
+        else if(ipv4h->ip_v == 6)
+        {
+            parseable = process_v6((void *) ipv4h);
+        }
+        else
+        {
+            parseable = false;
+        }
     }
 }
 
@@ -148,13 +164,19 @@ bool SuperPacket::process_v6(void *pkt)
 
 void SuperPacket::get_bitstring(Config *c, std::vector<int8_t> &to_fill)
 {
-    if(c->eth == 1) ethernet_header.get_bitstring(to_fill, c->fill_with);
-    if(c->ipv4 == 1) ipv4_header.get_bitstring(to_fill, c->fill_with);
-    if(c->ipv6 == 1) ipv6_header.get_bitstring(to_fill, c->fill_with);
-    if(c->tcp == 1)  tcp_header.get_bitstring(to_fill,  c->fill_with);
-    if(c->udp == 1)  udp_header.get_bitstring(to_fill,  c->fill_with);
-    if(c->icmp == 1) icmp_header.get_bitstring(to_fill, c->fill_with);
-    if(c->payload != 0) payload.get_bitstring(to_fill,  c->fill_with);
+    // static bool is_print = false;
+    if(c->wlan == 1) {  // kaiyu
+        radiotap_header.get_bitstring(to_fill, c->fill_with);
+        wlan_header.get_bitstring(to_fill, c->fill_with);
+    } else {
+        if(c->eth == 1) ethernet_header.get_bitstring(to_fill, c->fill_with);
+        if(c->ipv4 == 1) ipv4_header.get_bitstring(to_fill, c->fill_with);
+        if(c->ipv6 == 1) ipv6_header.get_bitstring(to_fill, c->fill_with);
+        if(c->tcp == 1)  tcp_header.get_bitstring(to_fill,  c->fill_with);
+        if(c->udp == 1)  udp_header.get_bitstring(to_fill,  c->fill_with);
+        if(c->icmp == 1) icmp_header.get_bitstring(to_fill, c->fill_with);
+        if(c->payload != 0) payload.get_bitstring(to_fill,  c->fill_with);
+    }
 }
 
 std::string SuperPacket::get_ip_address()
@@ -166,6 +188,19 @@ std::string SuperPacket::get_ip_address()
     else if(ipv6_header.get_raw() != NULL)
     {
         return ipv6_header.get_src_ip();
+    }
+    else
+    {
+        return "NULL";
+    }
+
+}
+
+std::string SuperPacket::get_tx_mac_address()
+{
+    if(wlan_header.get_raw() != NULL)
+    {
+        return wlan_header.get_tx_mac();
     }
     else
     {

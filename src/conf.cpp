@@ -8,6 +8,7 @@
 
 Config::Config()
 {
+    this->wlan = 0; // kaiyu
     this->eth = 0;
     this->ipv4 = 0;
     this->ipv6 = 0;

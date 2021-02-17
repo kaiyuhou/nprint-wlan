@@ -20,6 +20,7 @@ class Config
     public: 
         Config();
         /* Protocol flags */
+        uint8_t wlan; // kaiyu: TODO: Do we need the radiotap flag?
         uint8_t eth;
         uint8_t ipv4;
         uint8_t ipv6;
