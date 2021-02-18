@@ -10,7 +10,7 @@ sudo apt install autotools-dev
 
 - Install
   - You may not need `sudo`. But it doesn't work without `sudo` on my machine.
-  - `make install` may not necessary if you just want the `nprint` executable.
+  - `make install` may not be necessary if you just want the `nprint` executable.
 ```
 autoreconf -i
 sudo ./configure
