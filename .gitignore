@@ -13,13 +13,13 @@ TMP*
 ######################
 *.h5
 *.out
-*.csv 
-*.txt
-*.gz
+# *.csv 
+# *.txt
+# *.gz
 *.tar
 *.bz2
-*.pcap
-*.pkl
+# *.pcap
+# *.pkl
 
 
 # Logs and databases #
@@ -186,3 +186,4 @@ dmypy.json
 .vscode/
 autom4te.cache/
 build-aux/
+.idea/
