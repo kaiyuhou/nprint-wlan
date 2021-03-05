@@ -1,5 +1,24 @@
 # Kaiyu's Notes
 
+## Example: mulit-device classifier for Wi-Fi devices
+
+- sample-1: wlan_2020_11_05_03.pcap, 3910 packets
+
+- juypter notebook: [devices-classifier-mult.ipynb](example/devices-classifier-mulit.ipynb)
+
+- confusion matrix
+
+![](imgs/sample-1_01.png)
+
+- normalized confusion matrix
+  
+![](imgs/sample-1_02.png)
+
+- nPrintML, AutoML confusion matrix: [devices-classifier-mult-nprintml.ipynb](example/devices-classifier-mulit-nprintml.ipynb)
+
+![]
+
+
 - Requirement packages
 ```shell
 sudo apt install libpcap-dev

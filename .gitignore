@@ -187,3 +187,4 @@ dmypy.json
 autom4te.cache/
 build-aux/
 .idea/
+*.npt
