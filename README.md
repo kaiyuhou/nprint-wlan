@@ -2,9 +2,9 @@
 
 ## Example: mulit-device classifier for Wi-Fi devices
 
-- sample-1: wlan_2020_11_05_03.pcap, 3910 packets
+sample-1: wlan_2020_11_05_03.pcap, 3910 packets
 
-- juypter notebook: [devices-classifier-mult.ipynb](example/devices-classifier-mulit.ipynb)
+- juypter notebook: [devices-classifier-mulit.ipynb](example/devices-classifier-mulit.ipynb)
 
 - confusion matrix
 
@@ -14,9 +14,30 @@
   
 ![](imgs/sample-1_02.png)
 
-- nPrintML, AutoML confusion matrix: [devices-classifier-mult-nprintml.ipynb](example/devices-classifier-mulit-nprintml.ipynb)
+- nPrintML, AutoML confusion matrix: [devices-classifier-mulit-nprintml.ipynb](example/devices-classifier-mulit-nprintml.ipynb)
 
-![]
+![](imgs/sample-1_03.png)
+
+
+sample-2: wlan_2021_03_04_04-2.4GTrain.pcap, 116114 packets
+
+- juypter notebook: [devices-classifier-mulit-largePCAP.ipynb](example/devices-classifier-mulit-largePCAP.ipynb)
+
+- confusion matrix
+
+![](imgs/sample-2_01.png)
+
+- normalized confusion matrix
+  
+![](imgs/sample-2_02.png)
+
+- We directly apply classifier from training sample-2 to sample-3: wlan_2021_03_04_04-2.4Test.pcap, 20302 packets
+
+- Looks great!
+
+![](imgs/sample-2_03.png)
+
+![](imgs/sample-2_04.png)
 
 
 - Requirement packages
