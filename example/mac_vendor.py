@@ -1,3 +1,5 @@
+import numpy as np
+
 vender_map = {} # key: mac, '00:00:01', value: ('short name', 'long name')
 manuf_path = 'MAC_OUI/manuf.txt'
 
@@ -47,6 +49,26 @@ def get_top_vendors(pd_sample, n: int=10):
         top_vendors.append(vendor)
 
     return top_vendors
+
+
+def label_packets(pd_packets, vendors):
+    samples = []
+    labels = []
+    samples_without_vendor = []
+
+    for _, row in pd_packets.iterrows():
+        vendor = get_vendor(row.name)
+        
+        if vendor == 'None':
+            samples_without_vendor.append(np.array(row))
+        else: 
+            samples.append(np.array(row))
+            if vendor in vendors:
+                labels.append(vendor)
+            else:
+                labels.append('Others')
+
+    return samples, labels, samples_without_vendor
 
 
 load_vender_map()
