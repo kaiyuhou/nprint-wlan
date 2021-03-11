@@ -19,6 +19,7 @@ Alternative way by command lines
 
 ## Channel Hopping
 
+- Mannualy Channel Switch
 ```bash
 # Apple undocumented AirPort comment: only for the fisrt time
 sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/local/bin/airport 
@@ -26,4 +27,16 @@ sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Curre
 sudo airport -z
 # switch channel to 161
 sudo airport -c161
+```
+
+- Auto Channel Hopping
+```bash
+# auto script
+sudo bash mac_wifi_channel_hopping.sh
+#
+# or call the script directly
+# 2.4GHZ, 5 seconds duration 
+sudo mac_chanhop.sh -b IEEE80211B -d 5 
+# 5GHZ and 2.4GHZ
+sudo mac_chanhop.sh -b IEEE80211A -b IEEE80211B -d 5
 ```
