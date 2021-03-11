@@ -115,6 +115,11 @@ for BAND in $BANDS ; do
 	esac
 done
 
+if [ ! -f "/usr/local/bin/airport" ]; then
+	echo "AirPort does not exist, ln a new one"
+	ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/local/bin/airport
+fi
+
 echo "Stop wifi connection"
 airport -z
 
