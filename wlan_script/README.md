@@ -40,7 +40,7 @@ sudo bash mac_wifi_channel_hopping.sh
 #
 # Or call the script directly
 # 2.4GHZ, 5 seconds duration 
-sudo mac_chanhop.sh -b IEEE80211B -d 5 
+sudo bash mac_chanhop.sh -b IEEE80211B -d 5 
 # 5GHZ and 2.4GHZ
-sudo mac_chanhop.sh -b IEEE80211A -b IEEE80211B -d 5
+sudo bash mac_chanhop.sh -b IEEE80211A -b IEEE80211B -d 5
 ```
