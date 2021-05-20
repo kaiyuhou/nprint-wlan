@@ -42,7 +42,10 @@ def get_top_vendors(pd_sample, n: int=10):
     num_samples = pd_sample.shape[0]
 
     from collections import Counter
-    c = Counter([get_vendor(row.name) for _, row in pd_sample.iterrows()])
+
+    unique_macs = set([row.name for _, row in pd_sample.iterrows()])
+
+    c = Counter([get_vendor(mac) for mac in unique_macs])
     
     top_vendors = []
 
