@@ -23,7 +23,7 @@ void RadiotapHeader::print_header()
     }
 }
 
-uint32_t RadiotapHeader::get_header_len() { return 56; }
+uint32_t RadiotapHeader::get_header_len() { return 26; }
 
 void RadiotapHeader::get_bitstring(std::vector<int8_t> &to_fill, int8_t fill_with)
 {
