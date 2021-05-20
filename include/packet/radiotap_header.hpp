@@ -12,11 +12,11 @@
 
 #include "packet_header.hpp"
 
-#define SIZE_RADIOTAP_HEADER_BITSTRING 56
+#define SIZE_RADIOTAP_HEADER_BITSTRING 26
 
 struct radiotap_header
 {
-  uint8_t  radiotap_data[56];	/* all bytes for radiotap_data 	*/
+  uint8_t  radiotap_data[26];	/* all bytes for radiotap_data 	*/
 };
 
 class RadiotapHeader : public PacketHeader
