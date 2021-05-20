@@ -32,7 +32,7 @@ def execute_nprint(pcap, nprint):
     pcap_path, pcap_filename = os.path.split(pcap)
     npt_fliename = pcap_filename.replace('.pcap', '.npt')
     
-    os.system(f'{nprint} -w -P {pcap} -W {NPT_DIR}{npt_fliename}')
+    os.system(f'{nprint} -r -w -P {pcap} -W {NPT_DIR}{npt_fliename} -O 5')
     return f'{NPT_DIR}{npt_fliename}'
 
 
