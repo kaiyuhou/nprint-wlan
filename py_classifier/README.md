@@ -9,7 +9,7 @@ source config_conda_venv.sh
 ## classifier with Random Forest
 
 ```shell
-python3 classifier.py TRAIN_FILE_PATH.pcap TEST_FILE_PATH.pcap NPRINT_PATH
+python3 classifier.py TRAIN_FILE_PATH.pcap TEST_FILE_PATH.pcap NPRINT_PATH NUM_VENDORS
 # example
-python3 classifier.py ../example/wlan_2020_11_05_03.pcap ../example/wlan_2020_11_05_02.pcap ../nprint
+python3 classifier.py ../example/wlan_2020_11_05_03.pcap ../example/wlan_2020_11_05_02.pcap ../nprint 10
 ```

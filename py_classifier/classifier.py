@@ -41,13 +41,20 @@ def load_npt(npt_file, n_vendors=10):
     print('nPrint_wlan: Number of Packets: {0}, Features per packet: {1}'.format(nprint_wlan.shape[0], nprint_wlan.shape[1]))
 
     nprint_wlan_with_src_mac = nprint_wlan.loc[nprint_wlan.index != 'None']
+    # nprint_wlan_with_src_mac = nprint_wlan_with_src_mac.loc[nprint_wlan_with_src_mac.index != '00:00:00:00:00:00']
     print('nprint_wlan_with_src_mac: Number of Packets: {0}, Features per packet: {1}'.format(nprint_wlan_with_src_mac.shape[0], nprint_wlan_with_src_mac.shape[1]))
 
     num_sample_packets = nprint_wlan_with_src_mac.shape[0]
 
-    vendor_counter = Counter([get_vendor(row.name) for _, row in nprint_wlan_with_src_mac.iterrows()])
+    unique_macs = set([row.name for _, row in nprint_wlan_with_src_mac.iterrows()])
+    # vendor_counter = Counter([get_vendor(row.name) for _, row in nprint_wlan_with_src_mac.iterrows()])
+    print(f'Unique MACs: {len(unique_macs)}')
+    
+    vendor_counter = Counter([get_vendor(mac) for mac in unique_macs])
+    
     top_vendors = get_top_vendors(nprint_wlan, n_vendors)
     print(f'Top {n_vendors} vendors: {top_vendors}')
+    print(f'{vendor_counter.most_common(n_vendors)}')
 
     samples, labels, samples_without_vendor = label_packets(nprint_wlan_with_src_mac, top_vendors)
     print(f'Samples: {len(samples)}, Features: {len(samples[0])}')
@@ -122,7 +129,22 @@ def test(clf, top_vendors, test_file, nprint, n_vendors=10):
     apply_classifier(clf, samples, labels, vendor_counter, top_vendors, sample_name=os.path.split(npt_file)[1])
 
 
+def uzip_cp(file_path):
+    path, name = os.path.split(file_path)
+    os.system(f'cp {file_path} .')
+    os.system(f'gzip -dk {name}')
+    return name[:-3]
+
+
 if __name__ == '__main__':
-    _, train_file, test_file, nprint = sys.argv
-    clf, top_vendors = train(train_file, nprint)
-    test(clf, top_vendors, test_file, nprint)
+    _, train_file, test_file, nprint, n_vendors = sys.argv
+    n_vendors = int(n_vendors)
+
+    if train_file.endswith('.gz'):
+        train_file = uzip_cp(train_file)
+
+    if test_file.endswith('.gz'):
+        test_file = uzip_cp(test_file)
+
+    clf, top_vendors = train(train_file, nprint, n_vendors=n_vendors)
+    test(clf, top_vendors, test_file, nprint, n_vendors=n_vendors)

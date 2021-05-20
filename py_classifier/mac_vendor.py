@@ -27,6 +27,10 @@ def get_vendor(mac: str):
     mac = mac.upper()
     if mac == 'None':
         return 'None'
+    if mac.startswith('00:00:00'):
+        return 'None'
+    if mac.startswith('FF:FF:FF'):
+        return 'None'
     if mac[:8] in vender_map.keys():
         return vender_map[mac[:8]][0]
     if mac[:10] in vender_map.keys():
@@ -41,7 +45,9 @@ def get_top_vendors(pd_sample, n: int=10):
     c = Counter([get_vendor(row.name) for _, row in pd_sample.iterrows()])
     
     top_vendors = []
+
     for vendor, n_packets in c.most_common():
+        if vendor == '00:00:00': continue
         if len(top_vendors) >= n: break
         if vendor == 'None': continue
         # if n_packets < num_samples / 100: break
